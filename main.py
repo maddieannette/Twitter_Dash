@@ -1,8 +1,9 @@
 import tweepy 
 import configparser
 import pandas as pd
+import json
 
-#read config 
+# read config 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
@@ -11,9 +12,6 @@ api_key_secret = config['twitter']['api_key_secret']
 access_token = config['twitter']['access_token']
 access_token_secret = config['twitter']['access_token_secret']
 
-# test
-# print(api_key)
-
 # Authentication
 
 auth = tweepy.OAuthHandler(api_key, api_key_secret)
@@ -21,18 +19,42 @@ auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth)
 
-user_id = 'NHSuk'
-count = 20
-trim_user = True
-
-statuses = api.get_user(user_id)
-
-print(statuses)
-# print(public_tweets)
-# print(public_tweets[0].text)
-
-# to pull all tweets 
-# for tweet in public_tweets:
-#     print(tweet.text)
+# trends = api.get_place_trends(id = woeid)
+api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
+# read json to Dataframe 
+dfcodes = pd.read_json('wcodes.json')
+# test will small values
+# smalldf = dfcodes.head(4)
+# print(dfcodes)
+# dataframe to list to iterate through
+wcodeslist = dfcodes["woeid"].values.tolist()
+# print(wcodeslist)
+
+woeid = ''
+# loop through codes list 
+for wtrends in wcodeslist:
+    # print(str(wtrends) + "test")
+    trends = api.get_place_trends(id = wtrends)
+    for value in trends:
+        for trend in value['trends']:
+            print(str(wtrends) + " " + trend['name'])
+        # print(type(trend))
+        
+        # print(trends)
+# Get World City Codes
+# cityCodes = getCityCodesFromJson(jsonFilePath)
+# trendByCity = getTrendsForCityList(cityCodes)
+# saveToAwsDatabase(trendByCity)
+
+# def getCityCodesFromJson
+#   return json.load(data_file)
+
+# def getTrendsForCityList(cityCodes)
+# returnList = {}
+# for wdata in cityCodes
+#       cityTrends api.get_place_trends(id = woeid)
+#       returnList.push(wdata.citycode,cityTrends)
+
+# 
