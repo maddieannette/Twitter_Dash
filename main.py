@@ -2,6 +2,7 @@ import tweepy
 import configparser
 import pandas as pd
 import json
+from datetime import datetime
 
 # read config 
 config = configparser.ConfigParser()
@@ -54,15 +55,24 @@ for wtrends in wcodeslist:
         for trend in value['trends']:
             trend_name = trend['name']
             woeid_codes = wtrends
+            # date time value column
+            now = datetime.now()
+            timestamp_val = now.strftime("%d/%m/%Y %H:%M:%S")
+            # print("date and time =", timestamp_val)
             # print(trend_name)
             # print(woeid_codes)
-            codes_trends_list.append({'trend_name': str(trend_name),
-                                      'woeid_codes': str(woeid_codes)})
-            #trends_per_country = (str(wtrends) + " " + trend['name'])
-            
-            # print(trends_per_country)
-        # print(type(trend))
+            codes_trends_list.append({'trend_name': trend_name,
+                                      'woeid_codes': woeid_codes,
+                                      'timestamp': timestamp_val})
         
-print(type(codes_trends_list))
-# df_trends_list = pd.DataFrame(codes_trends_list, columns = ['trend', 'woeid'])
-# print(df_trends_list)
+# print(codes_trends_list)
+df_trends_list = pd.DataFrame(codes_trends_list)
+print(df_trends_list)
+
+# datetime object containing current date and time
+now = datetime.now()
+ 
+# print("now =", now)
+# dd/mm/YY H:M:S
+timestamp_val = now.strftime("%d/%m/%Y %H:%M:%S")
+print("date and time =", timestamp_val)
