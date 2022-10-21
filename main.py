@@ -1,8 +1,11 @@
+from asyncore import write
+import csv
 import tweepy 
 import configparser
 import pandas as pd
 import json
 from datetime import datetime
+# from dash import Dash, dash_table
 
 # read config 
 config = configparser.ConfigParser()
@@ -25,7 +28,7 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 
 most_visited = pd.read_csv('wiki60visited.csv')
 most_visited_list = most_visited["City"].values.tolist()
-# print(most_visited_list)
+print(most_visited_list)
 
 
 
@@ -69,10 +72,24 @@ for wtrends in wcodeslist:
 df_trends_list = pd.DataFrame(codes_trends_list)
 print(df_trends_list)
 
+# loop through and replace woeids with city names 
+# add_cities = {v['woeid']:v['name'] for v in json_file['wcodes.json'].itervalues()}
+
+# df_trends_list.loc[:, 'woeid'] = df_trends_list['woeid'].map(add_cities)
+
+
+df_trends_list.to_csv('Trends_File10_21_22.csv')
+
 # datetime object containing current date and time
-now = datetime.now()
+# now = datetime.now()
  
-# print("now =", now)
-# dd/mm/YY H:M:S
-timestamp_val = now.strftime("%d/%m/%Y %H:%M:%S")
-print("date and time =", timestamp_val)
+# # print("now =", now)
+# # dd/mm/YY H:M:S
+# timestamp_val = now.strftime("%d/%m/%Y %H:%M:%S")
+# print("date and time =", timestamp_val)
+
+
+
+###### plotly code 
+
+    
